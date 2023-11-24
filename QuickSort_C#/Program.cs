@@ -92,13 +92,10 @@ namespace QuickSort_InCSharp
                     IndexPivot = _Random.Next(FirstIndex, LastIndex);
                     break;
             }
-            Console.Write("Partición: " + _ContainPartition + " Intercambio: " + _ContainExchange + "\n");
-
             Swap(ref array[FirstIndex], ref array[IndexPivot]);
             PrintSwap(ref array, FirstIndex, LastIndex);
 
             _ContainExchange++;
-
             int Pivot = array[FirstIndex];
             int Left = FirstIndex + 1;
             int Right = LastIndex;
@@ -117,10 +114,7 @@ namespace QuickSort_InCSharp
 
                 if (Left <= Right)
                 {
-                    Console.Write("Partición: " + _ContainPartition + " Intercambio: " + _ContainExchange + "\n");
-
                     Swap(ref array[Left], ref array[Right]);
-
                     PrintSwap(ref array, FirstIndex, LastIndex);
 
                     _ContainExchange++;
@@ -132,12 +126,11 @@ namespace QuickSort_InCSharp
                     break;
                 }
             }
-            Console.Write("Partición: " + _ContainPartition + " Intercambio: " + _ContainExchange + "\n");
 
             Swap(ref array[FirstIndex], ref array[Right]);
             PrintSwap(ref array, FirstIndex, LastIndex); ;
+            
             _ContainExchange++;
-
             return Right;
         }
 
@@ -169,18 +162,28 @@ namespace QuickSort_InCSharp
             _ContainRecursive = 0;
         }
 
-        public static void PrintSwap(ref int[] arr, int izq, int der)
+        public static void PrintSwap(ref int[] array, int Left, int Right)
         {
-            Console.Write("[");
-            for (int i = izq; i <= der; i++)
+            Console.Write("[ ");
+            for (int i = 0; i < array.Length; i++)
             {
-                Console.Write(arr[i]);
-                if (i < der)
+                if (i == Left || i == Right)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(array[i]);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(array[i]);
+                }
+
+                if (i < array.Length - 1)
                 {
                     Console.Write(", ");
                 }
             }
-            Console.Write("]\n\n");
+            Console.Write(" ]\n");
         }
 
         public static int[] GenerarVector(int Minon = 0, int Lenght = 10)
