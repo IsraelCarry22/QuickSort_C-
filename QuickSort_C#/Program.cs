@@ -13,21 +13,21 @@ namespace QuickSort_InCSharp
 
         static void Main(string[] args)
         {
-            string[] Information = { "[1]Pivote Inicio", "[2]Pivote Mediano", "[3]Pivote Final", "[4]Pivote Random" };
+            string[] Information = { "[1]Pivote Inicio", "[2]Pivote Mediano", "[3]Pivote Final", "[4]Pivote Random", "[5]Salir" };
             _Random = new Random();
             do
             {
                 _ContainExchange = 1;
                 _Option = 0;
                 Console.Clear();
-                Console.WriteLine("Quicksort\n");
+                Console.WriteLine("Quicksort");
                 foreach (var i in Information)
                 {
                     Console.WriteLine(i);
                 }
                 Console.Write("Elige uno: ");
                 try { _Option = int.Parse(Console.ReadLine()); } catch { }
-                int[] NewVector = GenerarVector(-10, 10);
+                int[] NewVector = GenerarVector(0,_Random.Next(100));
                 switch (_Option)
                 {
                     case 1:
@@ -55,7 +55,7 @@ namespace QuickSort_InCSharp
                         _Option = _Random.Next(10000);
                         Console.Clear();
                         _ContainExchange = 1;
-                        Console.WriteLine("Pivote aleatorio");
+                        Console.WriteLine("Generador");
                         Print(ref NewVector);
                         Console.ReadKey();
                         break;
@@ -63,14 +63,14 @@ namespace QuickSort_InCSharp
             } while (_Option != 5);
         }
 
-        public static void Swap(ref int I, ref int J)
+        public static void Swap(ref int IndexOnew, ref int IndexTwo)
         {
-            int Temporary = I;
-            I = J;
-            J = Temporary;
+            int Temporary = IndexOnew;
+            IndexOnew = IndexTwo;
+            IndexTwo = Temporary;
         }
 
-        public static int Partition(ref int[] array, int FirstIndex, int LastIndex)
+        public static int Partition(ref int[] Array, int FirstIndex, int LastIndex)
         {
             _ContainPartition++;
             int IndexPivot;
@@ -92,71 +92,57 @@ namespace QuickSort_InCSharp
                     IndexPivot = _Random.Next(FirstIndex, LastIndex);
                     break;
             }
-            Swap(ref array[FirstIndex], ref array[IndexPivot]);
-            PrintSwap(ref array, FirstIndex, LastIndex);
-
+            Swap(ref Array[FirstIndex], ref Array[IndexPivot]);
+            PrintSwap(ref Array, FirstIndex, IndexPivot);
             _ContainExchange++;
-            int Pivot = array[FirstIndex];
+            int Pivot = Array[FirstIndex];
             int Left = FirstIndex + 1;
             int Right = LastIndex;
-
             while (true)
             {
-                while (Left <= Right && array[Left] <= Pivot)
+                while (Left <= Right && Array[Left] <= Pivot)
                 {
                     Left += 1;
                 }
 
-                while (Left <= Right && array[Right] >= Pivot)
+                while (Left <= Right && Array[Right] >= Pivot)
                 {
                     Right -= 1;
                 }
 
-                if (Left <= Right)
-                {
-                    Swap(ref array[Left], ref array[Right]);
-                    PrintSwap(ref array, FirstIndex, LastIndex);
-
-                    _ContainExchange++;
-                    Left += 1;
-                    Right -= 1;
-                }
-                else
+                if (Right < Left)
                 {
                     break;
                 }
-            }
+                Swap(ref Array[Left], ref Array[Right]);
+                PrintSwap(ref Array, Left, Right);
 
-            Swap(ref array[FirstIndex], ref array[Right]);
-            PrintSwap(ref array, FirstIndex, LastIndex); ;
-            
+                _ContainExchange++;
+                Left += 1;
+                Right -= 1;
+            }
+            Swap(ref Array[FirstIndex], ref Array[Right]);
+            PrintSwap(ref Array, FirstIndex, Right); ;
             _ContainExchange++;
             return Right;
         }
 
-        public static void QuickSort(ref int[] array, int FirstIndex, int LastIndex)
+        public static void QuickSort(ref int[] Array, int FirstIndex, int LastIndex)
         {
             if (FirstIndex < LastIndex)
             {
                 _ContainRecursive++;
-
-                int pivot = Partition(ref array, FirstIndex, LastIndex);
-
-                QuickSort(ref array, FirstIndex, pivot - 1);
-                QuickSort(ref array, pivot + 1, LastIndex);
+                int pivot = Partition(ref Array, FirstIndex, LastIndex);
+                QuickSort(ref Array, FirstIndex, pivot - 1);
+                QuickSort(ref Array, pivot + 1, LastIndex);
             }
         }
 
         public static void Print(ref int[] arr)
         {
             QuickSort(ref arr, 0, arr.Length - 1);
-
-            Console.Write("\nResult:");
-            foreach (int i in arr)
-            {
-                Console.Write(" " + i);
-            }
-
+            Console.Write("\nResult: [ " + string.Join(", ", arr) + " ]");
+            Console.WriteLine("\nSwap: " + _ContainExchange + "\nParticiones: " + _ContainPartition + "\nRecursividad: " + _ContainRecursive);
             _ContainExchange = 0;
             _ContainPartition = 0;
             _ContainRecursive = 0;
@@ -167,7 +153,13 @@ namespace QuickSort_InCSharp
             Console.Write("[ ");
             for (int i = 0; i < array.Length; i++)
             {
-                if (i == Left || i == Right)
+                if (Right == i && Left == i)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write(array[i]);
+                    Console.ResetColor();
+                }
+                else if (i == Left || i == Right)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(array[i]);
@@ -177,7 +169,6 @@ namespace QuickSort_InCSharp
                 {
                     Console.Write(array[i]);
                 }
-
                 if (i < array.Length - 1)
                 {
                     Console.Write(", ");
@@ -186,19 +177,25 @@ namespace QuickSort_InCSharp
             Console.Write(" ]\n");
         }
 
-        public static int[] GenerarVector(int Minon = 0, int Lenght = 10)
+        public static int[] GenerarVector(int Minon, int Lenght, int Val = 5)
         {
             List<int> _List = new List<int>();
-
             for (int i = Minon; i < Lenght; i++)
             {
-                int NewValor = _Random.Next(Minon, Lenght + 1);
-                if (_List.Contains(NewValor))
+                if (i < Val)
                 {
-                    i--;
-                    continue;
+                    int NewValor = _Random.Next(Minon, Lenght + 1);
+                    if (_List.Contains(NewValor))
+                    {
+                        i--;
+                        continue;
+                    }
+                    _List.Add(NewValor);
                 }
-                _List.Add(NewValor);
+                else
+                {
+                    break;
+                }
             }
             return _List.ToArray();
         }
