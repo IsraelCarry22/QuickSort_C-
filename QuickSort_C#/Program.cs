@@ -17,7 +17,7 @@ namespace QuickSort_InCSharp
             _Random = new Random();
             do
             {
-                _ContainExchange = 1;
+                _ContainExchange = 0;
                 _Option = 0;
                 Console.Clear();
                 Console.WriteLine("Quicksort");
@@ -104,25 +104,22 @@ namespace QuickSort_InCSharp
                 {
                     Left += 1;
                 }
-
                 while (Left <= Right && Array[Right] >= Pivot)
                 {
                     Right -= 1;
                 }
-
                 if (Right < Left)
                 {
                     break;
                 }
                 Swap(ref Array[Left], ref Array[Right]);
                 PrintSwap(ref Array, Left, Right);
-
                 _ContainExchange++;
                 Left += 1;
                 Right -= 1;
             }
             Swap(ref Array[FirstIndex], ref Array[Right]);
-            PrintSwap(ref Array, FirstIndex, Right); ;
+            PrintSwap(ref Array, FirstIndex, Right);
             _ContainExchange++;
             return Right;
         }
@@ -132,9 +129,9 @@ namespace QuickSort_InCSharp
             if (FirstIndex < LastIndex)
             {
                 _ContainRecursive++;
-                int pivot = Partition(ref Array, FirstIndex, LastIndex);
-                QuickSort(ref Array, FirstIndex, pivot - 1);
-                QuickSort(ref Array, pivot + 1, LastIndex);
+                int IndexPivot = Partition(ref Array, FirstIndex, LastIndex);
+                QuickSort(ref Array, FirstIndex, IndexPivot - 1);
+                QuickSort(ref Array, IndexPivot + 1, LastIndex);
             }
         }
 
