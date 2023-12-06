@@ -5,6 +5,7 @@ namespace QuickSort_InCSharp
 {
     internal class Program
     {
+        //QuickSort_InCSharp
         public static Random _Random;
         public static int _Option, _ContainExchange, _ContainPartition, _ContainRecursive;
         public static int[] _ArrayOne = { 4, 8, -3, 10, -7, -9, 2, -5, 6, 1 };
